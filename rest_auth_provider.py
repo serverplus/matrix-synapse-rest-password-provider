@@ -79,7 +79,7 @@ class RestAuthProvider(object):
             logger.info("Handling profile data")
             profile = auth["profile"]
 
-            store = yield self.account_handler.hs_.get_profile_handler().store
+            store = yield self.account_handler._hs.get_profile_handler().store
             if "display_name" in profile and ((registration and self.config.setNameOnRegister) or (self.config.setNameOnLogin)):
                 display_name = profile["display_name"]
                 logger.info("Setting display name to '%s' based on profile data", display_name)
@@ -98,7 +98,7 @@ class RestAuthProvider(object):
                         external_3pids.append({"medium": medium, "address": address})
                         logger.info("Looking for 3PID %s:%s in user profile", medium, address)
 
-                        validated_at = self.account_handler.hs_.get_clock().time_msec()
+                        validated_at = self.account_handler._hs.get_clock().time_msec()
                         if not (yield store.get_user_id_by_threepid(medium, address)):
                             logger.info("3PID is not present, adding")
                             yield store.user_add_threepid(
